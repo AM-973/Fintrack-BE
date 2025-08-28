@@ -1,0 +1,41 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from models.user import UserModel
+from serializers.user import UserSchema, UserLoginSchema, UserTokenSchema, UserResponseSchema
+from database import get_db
+
+router = APIRouter()
+
+@router.post("/register", response_model=UserResponseSchema)
+def create_user(user: UserSchema, db: Session = Depends(get_db)):
+    
+    existing_user = db.query(UserModel).filter(UserModel.email == user.email).first()
+
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already exists")
+
+    new_user = UserModel(email=user.email)
+    
+    new_user.set_password(user.password)
+
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return new_user
+
+@router.post("/login", response_model=UserTokenSchema)
+def login(user: UserLoginSchema, db: Session = Depends(get_db)):
+
+    
+    db_user = db.query(UserModel).filter(UserModel.email == user.email).first()
+
+    
+    if not db_user or not db_user.verify_password(user.password):
+        raise HTTPException(status_code=400, detail="Invalid email or password")
+
+    
+    token = db_user.generate_token()
+
+    
+    return {"token": token, "message": "Login successful"}
