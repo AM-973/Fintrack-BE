@@ -31,7 +31,6 @@ def create_project(project: ProjectCreateSchema, db: Session = Depends(get_db), 
   return new_project
 
 
-
 @router.put("/projects/{project_id}", response_model=ProjectSchema)
 def update_project(project_id: int, project: ProjectCreateSchema, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
   db_project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
