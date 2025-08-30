@@ -14,3 +14,8 @@ class CategoryCreateSchema(BaseModel):
     name: str
     description: Optional[str] = None
     budget: int  # Budget in cents
+
+class CategoryUpdateSchema(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    budget: Optional[int] = None
