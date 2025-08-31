@@ -7,7 +7,7 @@ from .user import UserResponseSchema
 
 class ProjectSchema(BaseModel):
   id: Optional[int] = Field(default=None) # This makes sure you don't have to explicitly add an id when sending json data
-  name: str
+  project_name: str
   budget: int  # Budget in cents
   description: Optional[str] = None
 
@@ -19,6 +19,6 @@ class ProjectSchema(BaseModel):
     orm_mode = True
 
 class ProjectCreateSchema(BaseModel):
-    name: str
+    project_name: str
     budget: int  # Budget in cents
     description: Optional[str] = None

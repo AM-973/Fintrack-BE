@@ -1,16 +1,18 @@
-import os
-from sqlalchemy.orm import sessionmaker
-from data.user_data import user_list
+from sqlalchemy.orm import Session, sessionmaker
+from config.environment import db_URI
 from sqlalchemy import create_engine
 from models.base import Base
-from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+# Import all models first to register them with SQLAlchemy
+from models.user import UserModel
+from models.project import ProjectModel  
+from models.category import CategoryModel
+from models.expense import ExpenseModel
 
-db_URI = os.getenv("db_URI")
-if not db_URI:
-    raise ValueError("db_URI not found in environment variables.")
+from data.user_data import create_test_users
+from data.project_data import create_test_projects
+from data.category_data import create_test_categories
+from data.expense_data import create_test_expenses
 
 engine = create_engine(db_URI)
 SessionLocal = sessionmaker(bind=engine)
@@ -21,14 +23,34 @@ def main():
         Base.metadata.drop_all(bind=engine)
         Base.metadata.create_all(bind=engine)
 
-        print("Seeding the database...")
-        with SessionLocal() as db:
-            db.add_all(user_list)
-            db.commit()
+    print("Seeding the database...")
+    db = SessionLocal()
 
-        print("Database seeding complete! 👋")
-    except Exception as e:
-        print("An error occurred:", e)
+    # Create data lists after all models are loaded
+    user_list = create_test_users()
+    project_list = create_test_projects()
+    category_list = create_test_categories()
+    expense_list = create_test_expenses()
+ 
+    db.add_all(user_list)
+    db.commit()
+    
+    db.add_all(project_list)
+    db.commit()
+    
+    db.add_all(category_list)
+    db.commit()
+    
+    db.add_all(expense_list)
+    db.commit()
+
+    
+
+    db.close()
+
+    print("Database seeding complete! 👋")
+except Exception as e:
+    print("An error occurred:", e)
 
 if __name__ == "__main__":
     main()
