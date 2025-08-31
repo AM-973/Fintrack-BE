@@ -43,13 +43,23 @@ def create_expense(category_id: int, expense: ExpenseCreateSchema, db: Session =
     return new_expense
 
 
-@router.put("/categories/{category_id}/expenses/{expense_id}", response_model=ExpenseSchema)
+@router.put("/expenses/{expense_id}", response_model=ExpenseSchema)
 def update_expense(expense_id: int, expense: ExpenseCreateSchema, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
+    db_expense = db.query(ExpenseModel).filter(ExpenseModel.id == expense_id).first()
+    if not db_expense:
+        raise HTTPException(status_code=404, detail="Expense not found")
+    expense_data = expense.dict(exclude_unset=True)
+    for key, value in expense_data.items():
+        setattr(db_expense, key, value)
+    db.commit()
+    db.refresh(db_expense)
+    return db_expense
+
+@router.delete("/expenses/{expense_id}")
+def delete_expense(expense_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
     expense = db.query(ExpenseModel).filter(ExpenseModel.id == expense_id).first()
     if not expense:
         raise HTTPException(status_code=404, detail="Expense not found")
-    return expense
-
-@router.delete("/categories/{category_id}/expenses/{expense_id}")
-def delete_expense(expense_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
-    expense = db.query(ExpenseModel).filter(ExpenseModel.id == expense_id).first()
+    db.delete(expense)
+    db.commit()
+    return {"message": f"Expense with ID {expense_id} has been deleted."}
