@@ -1,5 +1,3 @@
-# serializers/project.py
-
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from .category import CategorySchema
@@ -16,7 +14,7 @@ class ProjectSchema(BaseModel):
   user: UserResponseSchema
 
   class Config:
-    orm_mode = True
+    from_attributes = True
 
 class ProjectCreateSchema(BaseModel):
     project_name: str

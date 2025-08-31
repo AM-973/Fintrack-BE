@@ -1,5 +1,3 @@
-# data/expense_data.py
-
 from models.expense import ExpenseModel
 
 def create_test_expenses():
