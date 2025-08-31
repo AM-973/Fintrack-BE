@@ -1,5 +1,3 @@
-# data/user_data.py
-
 from models.user import UserModel
 
 def create_test_users():
@@ -13,7 +11,9 @@ def create_test_users():
     user4.set_password("securepassword4")
     user5 = UserModel(username="elena_popov", email="elena.popov@mail.ru")
     user5.set_password("securepassword5")
+    user6 = UserModel(username="string", email="string")
+    user6.set_password("string")
 
-    return [user1, user2, user3, user4, user5]
+    return [user1, user2, user3, user4, user5, user6]
 
 user_list = create_test_users()
