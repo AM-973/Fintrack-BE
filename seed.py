@@ -7,6 +7,7 @@ from models.base import Base
 from models.user import UserModel
 from models.project import ProjectModel  
 from models.category import CategoryModel
+from models.expense import ExpenseModel
 
 from data.user_data import create_test_users
 from data.project_data import create_test_projects

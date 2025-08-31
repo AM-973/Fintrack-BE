@@ -9,7 +9,7 @@ class ProjectModel(BaseModel):
     __tablename__ = "projects"
 
    
-    name = Column(String, nullable=False)
+    project_name = Column(String, nullable=False)
     budget = Column(Integer, nullable=False) 
     description = Column(Text)
     user_id = Column(Integer, ForeignKey('users.id'))
