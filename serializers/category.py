@@ -8,7 +8,7 @@ class CategorySchema(BaseModel):
   budget: int  # Budget in cents
 
   class Config:
-    orm_mode = True
+    from_attributes = True
 
 class CategoryCreateSchema(BaseModel):
     name: str

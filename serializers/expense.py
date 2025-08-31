@@ -7,7 +7,7 @@ class ExpenseSchema(BaseModel):
     amount: int  # Amount in cents
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ExpenseCreateSchema(BaseModel):
     name: str

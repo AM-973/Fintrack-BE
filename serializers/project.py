@@ -16,7 +16,7 @@ class ProjectSchema(BaseModel):
   user: UserResponseSchema
 
   class Config:
-    orm_mode = True
+    from_attributes = True
 
 class ProjectCreateSchema(BaseModel):
     project_name: str
