@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Numeric
+from sqlalchemy import Column, Integer, String, ForeignKey, Numeric
 from sqlalchemy.orm import relationship
 from .base import BaseModel 
 
@@ -11,4 +11,4 @@ class ExpenseModel(BaseModel):
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
     
     # Relationships
-    category = relationship("Category", back_populates="expenses")
+    category = relationship("CategoryModel", back_populates="expenses")
