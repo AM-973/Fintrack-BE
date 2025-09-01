@@ -2,12 +2,16 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 from .category import CategorySchema
 from .user import UserResponseSchema
+from typing import Optional, List, Dict, Any
+
 
 class ProjectSchema(BaseModel):
-  id: Optional[int] = Field(default=None) # This makes sure you don't have to explicitly add an id when sending json data
+  id: Optional[int] = Field(default=None) 
   project_name: str
-  budget: int  # Budget in cents
+  budget: int  
   description: Optional[str] = None
+  plan_type: str   
+  extra_config: Optional[Dict[str, Any]] = None  
 
   # Relationships
   categories: List[CategorySchema] = []
@@ -18,5 +22,7 @@ class ProjectSchema(BaseModel):
 
 class ProjectCreateSchema(BaseModel):
     project_name: str
-    budget: int  # Budget in cents
+    budget: int  
     description: Optional[str] = None
+    plan_type: str   
+    extra_config: Optional[Dict[str, Any]] = None  
