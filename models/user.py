@@ -1,6 +1,6 @@
 # models/user.py
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from .base import BaseModel
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone  
@@ -19,6 +19,7 @@ class UserModel(BaseModel):
     username = Column(String, nullable=False, unique=True)
     email = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
+    is_admin = Column(Boolean, default=False, nullable=False)
 
     projects = relationship('ProjectModel', back_populates='user')
 
@@ -37,6 +38,7 @@ class UserModel(BaseModel):
             "iat": datetime.now(timezone.utc),  # Issued at time
             # JWT 'sub' (subject) must be a string for PyJWT validation
             "sub": str(self.id),  # Subject - the user ID as string
+            "is_admin": self.is_admin,  # Include admin status in token
         }
 
         # Create the JWT token

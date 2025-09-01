@@ -6,6 +6,7 @@ class UserSchema(BaseModel):
     username: str  # User's username
     email: str  # User's email address
     password: str  # Plain text password for user registration (will be hashed before saving)
+    is_admin: bool
 
     class Config:
         from_attributes = True  # Enables compatibility with ORM models
