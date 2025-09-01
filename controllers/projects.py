@@ -6,43 +6,21 @@ from serializers.project import ProjectSchema, ProjectCreateSchema
 from typing import List
 from database import get_db
 from dependencies.get_current_user import get_current_user
+from services.calculations import (
+    calculate_savings_plan,
+    calculate_investment_plan,
+    calculate_hybrid_plan,
+)
 
 router = APIRouter()
 
-# the plans functions for calculating user's financial
-
-def calculate_savings_plan(budget, extra_config):
-    saving_rate = extra_config.get("saving_rate", 0.2)
-    months = extra_config.get("months", 6)
-    monthly_saving = budget * saving_rate
-    total_saved = monthly_saving * months
-    return {"monthly_saving": monthly_saving, "total_saved": total_saved, "months": months}
-
-def calculate_investment_plan(budget, extra_config):
-    monthly_contribution = extra_config.get("monthly_contribution", budget * 0.2)
-    months = extra_config.get("months", 12)
-    monthly_return = extra_config.get("monthly_return", 0.0)
-    
-    total = 0
-    for _ in range(months):
-        total = (total + monthly_contribution) * (1 + monthly_return)
-    
-    return {"monthly_contribution": monthly_contribution, "total_value": round(total, 2), "months": months}
-
-def calculate_hybrid_plan(budget, extra_config):
-    saving_rate = extra_config.get("saving_rate", 0.2)
-    debt_rate = extra_config.get("debt_rate", 0.1)
-    months = extra_config.get("months", 12)
-    
-    monthly_saving = budget * saving_rate
-    monthly_debt = budget * debt_rate
-    return {
-        "monthly_saving": monthly_saving,
-        "monthly_debt": monthly_debt,
-        "total_saving": monthly_saving * months,
-        "total_debt": monthly_debt * months,
-        "months": months
-    }
+# it's a variable that contains keys refer to each calculation 
+# in the calculation file in the services folder
+PLAN_CALCULATORS = {
+    "savings": calculate_savings_plan,
+    "investment": calculate_investment_plan,
+    "hybrid": calculate_hybrid_plan,
+}
 
 
 @router.get('/projects', response_model=List[ProjectSchema])
@@ -64,7 +42,20 @@ def create_project(project: ProjectCreateSchema, db: Session = Depends(get_db), 
   db.add(new_project)
   db.commit()
   db.refresh(new_project)
+  calc_func = PLAN_CALCULATORS.get(new_project.plan_type)
+  if calc_func:
+        calculation = calc_func(new_project.budget, new_project.extra_config)
+        # Attach as a dynamic attribute for serialization
+        setattr(new_project, "calculation", calculation)
+  else:
+        setattr(new_project, "calculation", {})
+
+    # Ensure relationships are loaded
+  _ = new_project.user
+  _ = new_project.categories
+
   return new_project
+
 
 
 @router.put("/projects/{project_id}", response_model=ProjectSchema)
