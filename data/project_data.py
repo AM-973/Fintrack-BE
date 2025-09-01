@@ -5,7 +5,7 @@ def create_test_projects():
         project_name="Home Renovation",
         budget=50000,
         description="Complete kitchen and bathroom renovation project",
-        plan_type="premium",
+        plan_type="savings",
         extra_config={"timeline": "6 months", "priority": "high"},
         user_id=1  # arjun_dev
     )
@@ -14,7 +14,7 @@ def create_test_projects():
         project_name="Wedding Planning",
         budget=25000,
         description="Planning and budgeting for wedding expenses",
-        plan_type="basic",
+        plan_type="investment",
         extra_config={"guests": 200, "venue": "outdoor"},
         user_id=2  # emma_johnson
     )
@@ -23,7 +23,7 @@ def create_test_projects():
         project_name="Business Startup",
         budget=100000,
         description="Initial funding and expenses for new tech startup",
-        plan_type="enterprise",
+        plan_type="hybrid",
         extra_config={"industry": "tech", "investors": True},
         user_id=1  # arjun_dev
     )
@@ -32,7 +32,7 @@ def create_test_projects():
         project_name="Vacation Fund",
         budget=8000,
         description="Saving and budgeting for European vacation",
-        plan_type="basic",
+        plan_type="savings",
         extra_config={"destination": "Europe", "duration": "3 weeks"},
         user_id=3  # fatima_ali
     )
@@ -41,7 +41,7 @@ def create_test_projects():
         project_name="Car Purchase",
         budget=30000,
         description="Budget for purchasing a new family car",
-        plan_type="standard",
+        plan_type="investment",
         extra_config={"car_type": "SUV", "payment_plan": "loan"},
         user_id=4  # lucas_silva
     )
@@ -50,7 +50,7 @@ def create_test_projects():
         project_name="Emergency Fund",
         budget=20000,
         description="Building emergency savings fund",
-        plan_type="basic",
+        plan_type="hybrid",
         extra_config={"goal": "safety net", "access": "instant"},
         user_id=5  # elena_popov
     )
