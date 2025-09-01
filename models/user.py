@@ -1,3 +1,5 @@
+# models/user.py
+
 from sqlalchemy import Column, Integer, String
 from .base import BaseModel
 from passlib.context import CryptContext

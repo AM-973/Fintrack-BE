@@ -1,3 +1,5 @@
+# serializers/user.py
+
 from pydantic import BaseModel
 
 class UserSchema(BaseModel):

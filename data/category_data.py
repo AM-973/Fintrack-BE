@@ -1,3 +1,4 @@
+
 from models.category import CategoryModel
 
 def create_test_categories():
