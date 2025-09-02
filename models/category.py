@@ -5,7 +5,7 @@ from .base import BaseModel
 class CategoryModel(BaseModel):
 
     __tablename__ = "categories"
-
+# dfghjjjjjjjjj
     name = Column(String, nullable=False)  
     description = Column(Text)  
     budget = Column(Integer, nullable=False)  
