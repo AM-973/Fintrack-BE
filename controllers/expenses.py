@@ -12,19 +12,23 @@ from models.expense import ExpenseModel
 router = APIRouter()
 
 @router.get("/categories/{category_id}/expenses", response_model=List[ExpenseSchema])
-def get_expenses_for_category(category_id: int, db: Session = Depends(get_db)):
+def get_expenses_for_category(category_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
     category = db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
+    if category.project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Error")
     return category.expenses
     
 
 
 @router.get("/categories/{category_id}/expenses/{expense_id}", response_model=ExpenseSchema)
-def get_single_expense(category_id: int, expense_id: int, db: Session = Depends(get_db)):
+def get_single_expense(category_id: int, expense_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
     category = db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
+    if category.project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Error")
     expense = db.query(ExpenseModel).filter(ExpenseModel.id == expense_id).first()
     if not expense:
         raise HTTPException(status_code=404, detail="Expense not found")
@@ -36,6 +40,8 @@ def create_expense(category_id: int, expense: ExpenseCreateSchema, db: Session =
     category = db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
+    if category.project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Error")
     new_expense = ExpenseModel(**expense.dict(), category_id=category_id)
     db.add(new_expense)
     db.commit()
@@ -48,6 +54,8 @@ def update_expense(expense_id: int, expense: ExpenseCreateSchema, db: Session = 
     db_expense = db.query(ExpenseModel).filter(ExpenseModel.id == expense_id).first()
     if not db_expense:
         raise HTTPException(status_code=404, detail="Expense not found")
+    if db_expense.category.project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Error")
     expense_data = expense.dict(exclude_unset=True)
     for key, value in expense_data.items():
         setattr(db_expense, key, value)
@@ -60,6 +68,8 @@ def delete_expense(expense_id: int, db: Session = Depends(get_db), current_user:
     expense = db.query(ExpenseModel).filter(ExpenseModel.id == expense_id).first()
     if not expense:
         raise HTTPException(status_code=404, detail="Expense not found")
+    if expense.category.project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Error")
     db.delete(expense)
     db.commit()
     return {"message": f"Expense with ID {expense_id} has been deleted."}
