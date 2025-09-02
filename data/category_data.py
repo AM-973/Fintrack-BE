@@ -1,4 +1,3 @@
-# data/category_data.py
 
 from models.category import CategoryModel
 

@@ -8,21 +8,18 @@ def create_test_expenses():
     expense1 = ExpenseModel(
         name="Kitchen Cabinets",
         amount=1500000,  # $15,000 in cents
-        budget=1800000,
         category_id=1
     )
     
     expense2 = ExpenseModel(
         name="Granite Countertops",
         amount=350000,  # $3,500 in cents
-        budget=400000,
         category_id=1
     )
     
     expense3 = ExpenseModel(
         name="Kitchen Appliances",
         amount=280000,  # $2,800 in cents
-        budget=350000,
         category_id=1
     )
     
@@ -30,14 +27,12 @@ def create_test_expenses():
     expense4 = ExpenseModel(
         name="Bathroom Tiles",
         amount=120000,  # $1,200 in cents
-        budget=150000,
         category_id=2
     )
     
     expense5 = ExpenseModel(
         name="Toilet and Fixtures",
         amount=85000,  # $850 in cents
-        budget=100000,
         category_id=2
     )
     
@@ -45,14 +40,12 @@ def create_test_expenses():
     expense6 = ExpenseModel(
         name="Reception Hall Rental",
         amount=800000,  # $8,000 in cents
-        budget=900000,
         category_id=3
     )
     
     expense7 = ExpenseModel(
         name="Ceremony Venue",
         amount=250000,  # $2,500 in cents
-        budget=300000,
         category_id=3
     )
     
@@ -60,14 +53,12 @@ def create_test_expenses():
     expense8 = ExpenseModel(
         name="Wedding Dinner",
         amount=450000,  # $4,500 in cents
-        budget=500000,
         category_id=4
     )
     
     expense9 = ExpenseModel(
         name="Bar Service",
         amount=180000,  # $1,800 in cents
-        budget=200000,
         category_id=4
     )
     
@@ -75,14 +66,12 @@ def create_test_expenses():
     expense10 = ExpenseModel(
         name="Wedding Photographer",
         amount=200000,  # $2,000 in cents
-        budget=250000,
         category_id=5
     )
     
     expense11 = ExpenseModel(
         name="Videography",
         amount=150000,  # $1,500 in cents
-        budget=180000,
         category_id=5
     )
     
@@ -90,21 +79,18 @@ def create_test_expenses():
     expense12 = ExpenseModel(
         name="Laptops and Computers",
         amount=1200000,  # $12,000 in cents
-        budget=1500000,
         category_id=6
     )
     
     expense13 = ExpenseModel(
         name="Office Furniture",
         amount=450000,  # $4,500 in cents
-        budget=600000,
         category_id=6
     )
     
     expense14 = ExpenseModel(
         name="Software Licenses",
         amount=320000,  # $3,200 in cents
-        budget=400000,
         category_id=6
     )
     
@@ -112,21 +98,18 @@ def create_test_expenses():
     expense15 = ExpenseModel(
         name="Google Ads Campaign",
         amount=180000,  # $1,800 in cents
-        budget=250000,
         category_id=7
     )
     
     expense16 = ExpenseModel(
         name="Social Media Marketing",
         amount=120000,  # $1,200 in cents
-        budget=150000,
         category_id=7
     )
     
     expense17 = ExpenseModel(
         name="Website Development",
         amount=350000,  # $3,500 in cents
-        budget=400000,
         category_id=7
     )
     
@@ -134,14 +117,12 @@ def create_test_expenses():
     expense18 = ExpenseModel(
         name="Business Registration",
         amount=50000,  # $500 in cents
-        budget=75000,
         category_id=8
     )
     
     expense19 = ExpenseModel(
         name="Legal Consultation",
         amount=280000,  # $2,800 in cents
-        budget=350000,
         category_id=8
     )
     
@@ -149,7 +130,6 @@ def create_test_expenses():
     expense20 = ExpenseModel(
         name="Round-trip Flights to Europe",
         amount=220000,  # $2,200 in cents
-        budget=280000,
         category_id=9
     )
     
@@ -157,14 +137,12 @@ def create_test_expenses():
     expense21 = ExpenseModel(
         name="Hotel in Paris",
         amount=120000,  # $1,200 in cents
-        budget=150000,
         category_id=10
     )
     
     expense22 = ExpenseModel(
         name="Airbnb in Rome",
         amount=95000,  # $950 in cents
-        budget=120000,
         category_id=10
     )
     
@@ -172,14 +150,12 @@ def create_test_expenses():
     expense23 = ExpenseModel(
         name="Museum Tickets",
         amount=25000,  # $250 in cents
-        budget=35000,
         category_id=11
     )
     
     expense24 = ExpenseModel(
         name="Food Tours",
         amount=18000,  # $180 in cents
-        budget=25000,
         category_id=11
     )
     
@@ -187,7 +163,6 @@ def create_test_expenses():
     expense25 = ExpenseModel(
         name="Car Down Payment",
         amount=800000,  # $8,000 in cents
-        budget=1000000,
         category_id=12
     )
     
@@ -195,7 +170,6 @@ def create_test_expenses():
     expense26 = ExpenseModel(
         name="Car Insurance Premium",
         amount=120000,  # $1,200 in cents
-        budget=150000,
         category_id=13
     )
     
@@ -203,14 +177,12 @@ def create_test_expenses():
     expense27 = ExpenseModel(
         name="Emergency Room Visit",
         amount=350000,  # $3,500 in cents
-        budget=500000,
         category_id=14
     )
     
     expense28 = ExpenseModel(
         name="Prescription Medications",
         amount=85000,  # $850 in cents
-        budget=120000,
         category_id=14
     )
     
@@ -218,14 +190,12 @@ def create_test_expenses():
     expense29 = ExpenseModel(
         name="Monthly Living Expenses",
         amount=280000,  # $2,800 in cents
-        budget=350000,
         category_id=15
     )
     
     expense30 = ExpenseModel(
         name="Utilities and Bills",
         amount=120000,  # $1,200 in cents
-        budget=150000,
         category_id=15
     )
 

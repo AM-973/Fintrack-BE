@@ -6,21 +6,43 @@ from serializers.project import ProjectSchema, ProjectCreateSchema
 from typing import List
 from database import get_db
 from dependencies.get_current_user import get_current_user
+from services.calculations import (
+    calculate_savings_plan,
+    calculate_investment_plan,
+    calculate_hybrid_plan,
+)
 
 router = APIRouter()
 
+# it's a variable that contains keys refer to each calculation 
+# in the calculation file in the services folder
+PLAN_CALCULATORS = {
+    "savings": calculate_savings_plan,
+    "investment": calculate_investment_plan,
+    "hybrid": calculate_hybrid_plan,
+}
+
+
 @router.get('/projects', response_model=List[ProjectSchema])
-def get_projects(db: Session = Depends(get_db)):
-  projects = db.query(ProjectModel).all()
-  return projects
+def get_projects(
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(get_current_user)
+):
+    projects = db.query(ProjectModel).filter(ProjectModel.user_id == current_user.id).all()
+    return projects
 
 @router.get('/projects/{project_id}', response_model=ProjectSchema)
-def get_single_project(project_id: int, db: Session = Depends(get_db)):
-  project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
-  if project:
+def get_single_project(
+    project_id: int,
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(get_current_user)
+):
+    project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Operation forbidden")
     return project
-  else:
-    raise HTTPException(status_code=404, detail="Project not found")
 
 @router.post('/projects', response_model=ProjectSchema)
 def create_project(project: ProjectCreateSchema, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
@@ -28,7 +50,20 @@ def create_project(project: ProjectCreateSchema, db: Session = Depends(get_db), 
   db.add(new_project)
   db.commit()
   db.refresh(new_project)
+  calc_func = PLAN_CALCULATORS.get(new_project.plan_type)
+  if calc_func:
+        calculation = calc_func(new_project.budget, new_project.extra_config)
+        # Attach as a dynamic attribute for serialization
+        setattr(new_project, "calculation", calculation)
+  else:
+        setattr(new_project, "calculation", {})
+
+    # Ensure relationships are loaded
+  _ = new_project.user
+  _ = new_project.categories
+
   return new_project
+
 
 
 @router.put("/projects/{project_id}", response_model=ProjectSchema)
