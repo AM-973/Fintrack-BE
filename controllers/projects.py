@@ -24,17 +24,25 @@ PLAN_CALCULATORS = {
 
 
 @router.get('/projects', response_model=List[ProjectSchema])
-def get_projects(db: Session = Depends(get_db)):
-  projects = db.query(ProjectModel).all()
-  return projects
+def get_projects(
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(get_current_user)
+):
+    projects = db.query(ProjectModel).filter(ProjectModel.user_id == current_user.id).all()
+    return projects
 
 @router.get('/projects/{project_id}', response_model=ProjectSchema)
-def get_single_project(project_id: int, db: Session = Depends(get_db)):
-  project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
-  if project:
+def get_single_project(
+    project_id: int,
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(get_current_user)
+):
+    project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Operation forbidden")
     return project
-  else:
-    raise HTTPException(status_code=404, detail="Project not found")
 
 @router.post('/projects', response_model=ProjectSchema)
 def create_project(project: ProjectCreateSchema, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
