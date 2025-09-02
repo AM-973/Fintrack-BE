@@ -13,6 +13,7 @@ router = APIRouter()
 
 @router.get("/projects/{project_id}/categories", response_model=List[CategorySchema])
 def get_categories_for_project(project_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
+    """Get all categories for a specific project"""
     project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -20,17 +21,29 @@ def get_categories_for_project(project_id: int, db: Session = Depends(get_db), c
         raise HTTPException(status_code=403, detail="Error")
     return project.categories
 
-@router.get("/categories/{category_id}", response_model=CategorySchema)
-def get_single_category(category_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
-    category = db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
+
+@router.get("/projects/{project_id}/categories/{category_id}", response_model=CategorySchema)
+def get_single_category(project_id: int, category_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
+    """Get a specific category within a project"""
+    project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Error")
+    
+    category = db.query(CategoryModel).filter(
+        CategoryModel.id == category_id,
+        CategoryModel.project_id == project_id
+    ).first()
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
-    if category.project.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Error")
+    
     return category
+
 
 @router.post("/projects/{project_id}/categories", response_model=CategorySchema)
 def create_category(project_id: int, category: CategoryCreateSchema, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
+    
     project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -43,13 +56,22 @@ def create_category(project_id: int, category: CategoryCreateSchema, db: Session
     db.refresh(new_category)
     return new_category
 
-@router.put("/categories/{category_id}", response_model=CategorySchema)
-def update_category(category_id: int, category: CategoryCreateSchema, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
-    db_category = db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
+
+@router.put("/projects/{project_id}/categories/{category_id}", response_model=CategorySchema)
+def update_category(project_id: int, category_id: int, category: CategoryCreateSchema, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
+   
+    project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Error")
+    
+    db_category = db.query(CategoryModel).filter(
+        CategoryModel.id == category_id,
+        CategoryModel.project_id == project_id
+    ).first()
     if not db_category:
         raise HTTPException(status_code=404, detail="Category not found")
-    if db_category.project.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Error")
 
     category_data = category.dict(exclude_unset=True)
     for key, value in category_data.items():
@@ -60,13 +82,21 @@ def update_category(category_id: int, category: CategoryCreateSchema, db: Sessio
     return db_category
 
 
-@router.delete("/categories/{category_id}")
-def delete_category(category_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
-    db_category = db.query(CategoryModel).filter(CategoryModel.id == category_id).first()
+@router.delete("/projects/{project_id}/categories/{category_id}")
+def delete_category(project_id: int, category_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
+   
+    project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if project.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Error")
+    
+    db_category = db.query(CategoryModel).filter(
+        CategoryModel.id == category_id,
+        CategoryModel.project_id == project_id
+    ).first()
     if not db_category:
         raise HTTPException(status_code=404, detail="Category not found")
-    if db_category.project.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Error")
 
     db.delete(db_category)
     db.commit()
