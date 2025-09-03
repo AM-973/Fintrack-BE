@@ -19,7 +19,8 @@ app = FastAPI()
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://fintrack-p3f15hk6v-almatar973-gmailcoms-projects.vercel.app"
+    "https://fintrack-p3f15hk6v-almatar973-gmailcoms-projects.vercel.app",
+    "https://fintrack-qqevdfx78-almatar973-gmailcoms-projects.vercel.app/"
     
 ]
 
