@@ -19,7 +19,7 @@ app = FastAPI()
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    # Later, add the deployed frontend origin:
+    "https://fintrack-p3f15hk6v-almatar973-gmailcoms-projects.vercel.app"
     
 ]
 
