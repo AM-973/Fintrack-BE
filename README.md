@@ -70,7 +70,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/fintrack-backend.git
+   git clone https://github.com/AM-973/fintrack-be.git
    cd fintrack-backend
    ```
 
