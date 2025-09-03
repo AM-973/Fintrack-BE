@@ -21,6 +21,7 @@ origins = [
     "http://127.0.0.1:5173",
     "https://fintrack-p3f15hk6v-almatar973-gmailcoms-projects.vercel.app",
     "fintrack-fe-git-main-almatar973-gmailcoms-projects.vercel.app"
+    "https://fintrack-fe-blue.vercel.app/"
     
 ]
 
