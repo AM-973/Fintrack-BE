@@ -17,14 +17,17 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-database_url = os.environ.get("DB_URI")
-if database_url:
-        config.set_main_option("sqlalchemy.url", database_url)
-else:
-    # Fallback to a default or raise an error if the variable is not set
-    # For example, you can get it from alembic.ini if not found in env
-    raise ValueError("DB_URI environment variable is required")
 
+# Get database URL from environment
+database_url = os.environ.get("DATABASE_URL") or os.environ.get("DB_URI")
+
+if database_url:
+    # Handle Heroku's postgres:// URL format
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql://", 1)
+    config.set_main_option("sqlalchemy.url", database_url)
+else:
+    raise ValueError("DATABASE_URL or DB_URI environment variable is required")
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -33,15 +36,7 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
-
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
-
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
