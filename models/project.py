@@ -14,4 +14,4 @@ class ProjectModel(BaseModel):
     user_id = Column(Integer, ForeignKey('users.id'))
 
     user = relationship('UserModel', back_populates='projects')
-    categories = relationship("CategoryModel", back_populates="project")
+    categories = relationship("CategoryModel", back_populates="project", cascade="all, delete-orphan")

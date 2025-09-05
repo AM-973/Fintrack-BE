@@ -12,4 +12,4 @@ class CategoryModel(BaseModel):
 
     project_id = Column(Integer, ForeignKey('projects.id'), nullable=False)
     project = relationship("ProjectModel", back_populates="categories")
-    expenses = relationship("ExpenseModel", back_populates="category")
+    expenses = relationship("ExpenseModel", back_populates="category", cascade="all, delete-orphan")
